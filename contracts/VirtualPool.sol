@@ -54,7 +54,8 @@ contract VirtualPool is ReentrancyGuard, Ownable
     }
     
     /**
-    @notice Changes the spot price of A tokens in the virtual pool by changing the amount of A tokens in the virtual pool.
+    @notice Changes the spot price of A tokens in the virtual pool by changing the 
+    amount of A tokens in the virtual pool.
     @param dPrice Price of A tokens in terms of B tokens with 18 decimals.
     */
     function setPriceA(uint256 dPrice) public onlyOwner {
@@ -71,7 +72,8 @@ contract VirtualPool is ReentrancyGuard, Ownable
     }
 
     /**
-    @notice Changes the spot price of B tokens in the virtual pool by changing the amount of B tokens in the virtual pool.
+    @notice Changes the spot price of B tokens in the virtual pool by changing 
+    the amount of B tokens in the virtual pool.
     @param dPrice Price of B tokens in terms of A tokens with 18 decimals.
     */
     function setPriceB(uint256 dPrice) public onlyOwner {
@@ -80,7 +82,8 @@ contract VirtualPool is ReentrancyGuard, Ownable
     }
 
     /**
-    @notice Changes the size of pools (for example to account for changes in the token supplies).
+    @notice Changes the size of pools (for example to account for changes 
+    in the token supplies).
     @param dFactor Multiple by which to scale the pools with 18 decimals.
     */
     function scalePools(uint256 dFactor) public onlyOwner {
@@ -89,9 +92,11 @@ contract VirtualPool is ReentrancyGuard, Ownable
     }
 
     /**
-    @notice Previews how many tokens would be sent to the user when swapping from A to B using the virtual pool.
+    @notice Previews how many tokens would be sent to the user when swapping
+     from A to B using the virtual pool.
     @param dAmountA Amount of token A to be swapped by the user with 18 decimals.
-    @return uint256 Amount of token B to be sent to the user from the swap with 18 decimals.
+    @return uint256 Amount of token B to be sent to the user from the swap 
+    with 18 decimals.
     */
     function previewSwapAB(uint256 dAmountA) public view returns (uint256) {
         return calcSwapAmount(poolSizeA, poolSizeB, dAmountA);

@@ -106,7 +106,8 @@ contract Controller is RewardsManager, ErrorTracker {
 
     //*** Getters for prices and virtual pool sizes ***//
     /**
-    @notice Getter for the current target price in H2O for the ICE token. Protocol tries to move the price of the ICE token towards the target price.
+    @notice Getter for the current target price in H2O for the ICE token. 
+    Protocol tries to move the price of the ICE token towards the target price.
     @return uint256 Target price for ICE token in H2O with 18 decimals.
     */
     function getTargetICEPrice() public view returns (uint256) {
@@ -284,7 +285,8 @@ contract Controller is RewardsManager, ErrorTracker {
     //*** Rewards Functions ***//
 
     /**
-    @notice Calls housekeeping functions when a user claims ICE/STM rewards (e.g., change sizes of virtual pools).  Overrides RewardsManager function.
+    @notice Calls housekeeping functions when a user claims ICE/STM rewards 
+    (e.g., change sizes of virtual pools).  Overrides RewardsManager function.
     */
     function onRewardsClaimed() internal override {
         _updatePoolSize();
@@ -293,7 +295,9 @@ contract Controller is RewardsManager, ErrorTracker {
     //*** ErrorTracker Functions ***//
 
     /**
-    @notice Calculates the current error as the difference between the ICE/H2O virtual pool ICE price and the target ICE price.  Overrides ErrorTracker function.
+    @notice Calculates the current error as the difference between the
+     ICE/H2O virtual pool ICE price and the target ICE price.  
+     Overrides ErrorTracker function.
     @return int256 The calculated error with 18 decimals.
     */
     function calculateError() internal override view returns (int256) {
@@ -301,8 +305,10 @@ contract Controller is RewardsManager, ErrorTracker {
     }
 
     /**
-    @notice Calls functions to respond to and mitigate error between the ICE/H2O virtual pool ICE price and target ICE price.  Overrides ErrorTracker function.
-    @param dError Current error between the ICE/H2O virtual pool ICE price and target ICE price with 18 decimals.
+    @notice Calls functions to respond to and mitigate error between the ICE/H2O 
+    virtual pool ICE price and target ICE price.  Overrides ErrorTracker function.
+    @param dError Current error between the ICE/H2O virtual pool ICE price and target 
+    ICE price with 18 decimals.
     @param dAccumError Accumulated error (integral of current error) with 18 decimals.
     @param iTimeDelta Time in seconds since the error was last calculated and applied.
     */
@@ -321,7 +327,8 @@ contract Controller is RewardsManager, ErrorTracker {
     //*** Update Functions ***//
 
     /**
-    @notice Scale size of ICE/H2O virtual pool and STM/H2O virtual pool when H2O is added to the system to ensure pool size keeps up with token supply.
+    @notice Scale size of ICE/H2O virtual pool and STM/H2O virtual pool when 
+    H2O is added to the system to ensure pool size keeps up with token supply.
     */
     // TODO: When we scale the pools it causes increase in total H2O, and vice
     //       versa. Will this converge to the right level?
@@ -354,7 +361,8 @@ contract Controller is RewardsManager, ErrorTracker {
     }
 
     /**
-    @notice Scale a target change that is responsive to an error based on the time since the last change was made.
+    @notice Scale a target change that is responsive to an error based on the time 
+    since the last change was made.
     @param dChange The change to be scaled with 18 decimals.
     @param iTimeDelta Time in seconds since the error was last calculated and applied.
     @param iBaseTime The time in seconds used as a base reference for the scaling.
@@ -380,8 +388,10 @@ contract Controller is RewardsManager, ErrorTracker {
     }
 
     /**
-    @notice Change the target ICE price to drift towards the actual ICE price based on the current error.
-    @param dError Current error between the ICE/H2O virtual pool ICE price and target ICE price with 18 decimals.
+    @notice Change the target ICE price to drift towards the actual ICE price based 
+    on the current error.
+    @param dError Current error between the ICE/H2O virtual pool ICE price and target 
+    ICE price with 18 decimals.
     @param iTimeDelta Time in seconds since the error was last calculated and applied.
     */
     function _updateTargetICEPrice(int256 dError, uint256 iTimeDelta) private {
@@ -400,9 +410,12 @@ contract Controller is RewardsManager, ErrorTracker {
     }
 
     /**
-    @notice Change the STM price to add or remove H2O from the system based on the current error.
-    @param dError Current error between the ICE/H2O virtual pool ICE price and target ICE price with 18 decimals.
-    @param iTimeDelta Time in seconds since the error was last calculated and applied.
+    @notice Change the STM price to add or remove H2O from the system based 
+    on the current error.
+    @param dError Current error between the ICE/H2O virtual pool ICE price 
+    and target ICE price with 18 decimals.
+    @param iTimeDelta Time in seconds since the error was last calculated 
+    and applied.
     */
     function _updateSTMPrice(int256 dError, uint256 iTimeDelta) private
     {
@@ -413,12 +426,14 @@ contract Controller is RewardsManager, ErrorTracker {
         // Scale the change in steam price based on the config constant.
         int256 dPriceChange = dError.mul(D_STEAM_PRICE_FACTOR);
 
-        // Scale the change based on the ratio of the steam price to the ice
+        // Scale the change based on the ratio of the steam price to 
+        // the ice
         // price.
         int256 dPriceRatio = dSTMPrice.div(dICEPrice);
         dPriceChange = dPriceChange.mul(dPriceRatio);
 
-        // Scale the change based on the the amount of time that has passed
+        // Scale the change based on the the amount of time that 
+        // has passed
         dPriceChange = _scaleChangeWithTime(
             dPriceChange,
             iTimeDelta,
@@ -432,9 +447,12 @@ contract Controller is RewardsManager, ErrorTracker {
     }
 
     /**
-    @notice Change the STM rewards (condensation) paid in H2O based on the accumulated error.
-    @param dAccumError Accumulated error (integral of current error) with 18 decimals.
-    @param iTimeDelta Time in seconds since the error was last calculated and applied.
+    @notice Change the STM rewards (condensation) paid in H2O based 
+    on the accumulated error.
+    @param dAccumError Accumulated error (integral of current error) 
+    with 18 decimals.
+    @param iTimeDelta Time in seconds since the error was last 
+    calculated and applied.
     */
     function _updateCondensationRate(
         int256 dAccumError,
